@@ -23,14 +23,18 @@ knitr::opts_chunk$set(eval = TRUE)
 knitr::include_graphics("img/monroe-summer.jpeg")
 ```
 
-For this lab you will again be working with hourly flux data from the Morgan Monroe State Forest ecosystem flux tower, located in Indiana.
+For this lab you will again be working with hourly flux data from the Morgan Monroe State Forest ecosystem flux tower, located in Indiana.  
+
 These data are generated from near-surface meteorological measurements paired with measurements of atmospheric gases including carbon dioxide and water vapour concentrations.
 
-The data are located in your `/data` folder.
+The data are located in your `/data` folder.  
+
 Look in the folder to check the name.
 
-We provide a data dictionary here to give you more information on these variables.
-Don't worry about the details and scientific units!
+We provide a data dictionary here to give you more information on these variables.  
+
+Don't worry about the details and scientific units!  
+
 The goal of this lab is **not** to become ecosystem scientists :)
 
 **Data Dictionary**
@@ -74,13 +78,18 @@ Before we start the lab, let's warm up by changing the YAML in the starter file:
 # replace with your code
 ```
 
+### End of Exercise 1
+
 ## Fixing the date column
 
-Before we subset based on `date`, we need to convert the `date` column into a **date class**, otherwise R will treat it like a numerical variable.
-The following code chunk is in your starter file.
+Before we subset based on `date`, we need to convert the `date` column into a **date class**, otherwise R will treat it like a numerical variable.  
+
+The following code chunk is in your starter file.  
+
 Run it to fix the date column (also remove eval = F, or set it = T.)
 
-You don't need to do anything else - just look at the code and output, and satisfy yourself that you understand why we are using the `{lubridate}` function `myd_hm()`.
+You don't need to do anything else - just look at the code and output, and satisfy yourself that you understand why we are using the `{lubridate}` function `myd_hm()`.  
+
 If you're not sure, ask about it!
 
 ```{r fix-dates, eval = F}
@@ -91,7 +100,7 @@ head(fluxes)
 
 ## Filtering for a summer month, and a numerical explanatory variable of interest
 
-2.  Copy the code chunk below into Exercise 2 in your starter file.\
+2.  Copy the code chunk below into Exercise 2 in your starter file:
 
 -   Then, complete the pipeline so that it will subset the data for **one month in summer in 2020** (June, July or August).\
 
@@ -107,6 +116,8 @@ fluxes_subset <- ___ %>%
 head(fluxes_subset, 10) 
 ```
 
+### End of Exercise 2
+
 ## Checking our dimensions
 
 3.  Before we generate many random samples from our month of flux data. Let's double check the dimensions of our dataset.
@@ -114,14 +125,20 @@ head(fluxes_subset, 10)
 -   Insert and label a code chunk into your starter file under Exercise 3 or use in-line code to state how many observations (rows) of data you have for the month you selected.
 -   Also state what each row represents
 
+### End of Exercise 3
+
 4.  If we defined our underlying population as **summertime** `fco2` fluxes, would our sample be a good sample of that population? Explain why or why not?
+
+### End of Exercise 4
 
 ## Computing our sample slope by fitting a model
 
-4.  Insert and label a code chunk that fits a linear model between `fco2` and your chosen explanatory variable.\
+5.  Insert and label a code chunk that fits a linear model between `fco2` and your chosen explanatory variable.
 
 -   State in text narrative under your code how we interpret the model estimate values (i.e. by much does `fco2` change with a unit increase in the explanatory variable?)
 -   You can refer back to your code from lab 7 to write this answer.
+
+### End of Exercise 5
 
 ## Simulating a subsample
 
@@ -130,7 +147,7 @@ In a sense, therefore, we do roughly have a sense of the underlying "population"
 More often in science, we only have a few samples from a much larger population.
 So in the next exercises we will randomly sub-sample our month of data to simulate this more common scenario.
 
-5.  Copy and complete the code chunk below that will randomize the order of the observations (rows) in your month of data, then slice (retain) only the first 20% of the data. You can manually calculate how many rows that corresponds to by referring back to your answer for Exercise 3.
+6.  Copy and complete the code chunk below that will randomize the order of the observations (rows) in your month of data, then slice (retain) only the first 20% of the data. You can manually calculate how many rows that corresponds to by referring back to your answer for Exercise 3.
 
 -   The new data object should be called `monroe_MONTH_subsample` (insert your month's name at MONTH) and state under the chunk what each row of the code is doing.
 -   Note here we are not yet generating bootstrap samples, so we use `replace  = F`.
@@ -144,17 +161,21 @@ ___ <- fluxes_subset %>%
   slice_head(___)
 ```
 
+### End of Exercise 6
+
 ## Bootstrap sampling your data
 
 We will now step you through generating bootstrap samples.
 
-6.  Take 1000 bootstrap samples. Call your new object `monroe_MONTH_boot`
+7.  Take 1000 bootstrap samples. Call your new object `monroe_MONTH_boot`
 
 ```{r create-bootstraps, eval = F}
 ___ <- bootstraps(___, times = 1000)
 ```
 
-7.  For each sample: fit a model and save output in model column. Tidy model output and save in coef_info column. Call your new model object `monroe_MONTH_models`.
+### End of Exercise 7
+
+8.  For each sample: fit a model and save output in model column. Tidy model output and save in coef_info column. Call your new model object `monroe_MONTH_models`.
 
 ```{r fit-models, eval = F}
 ___ <- ___ %>%
@@ -164,7 +185,9 @@ ___ <- ___ %>%
   )
 ```
 
-8.  Copy and paste the code chunk below into your starter file, then edit it so that, for each model, it unnests (extract) the slope coefficients. Save the object as `monroe_MONTH_coef` and output the percentiles:
+### End of Exercise 8
+
+9.  Copy and paste the code chunk below into your starter file, then edit it so that, for each model, it unnests (extract) the slope coefficients. Save the object as `monroe_MONTH_coef` and output the percentiles:
 
 ```{r get-slope-range, eval = F}
 ___ <- monroe_MONTH_models %>%
@@ -172,6 +195,8 @@ ___ <- monroe_MONTH_models %>%
 
 int_pctl(monroe_MONTH_models, coef_info)
 ```
+
+### End of Exercise 9
 
 🧶 ✅ ⬆️ Knit, *commit, and push your changes to GitHub with an appropriate commit message.*
 
@@ -181,7 +206,7 @@ We might ask the question: Are warm temperatures (\> 20-degrees Celsius) more li
 
 First, we need to convert the `air_temperature` variable into a categorical variable.
 
-9.  Copy and paste the code chunk below into your starter file under Exercise 9, and complete the `mutate()` and `case_when()` function combination to set `air_temperature` values greater than 30-degrees Celsius equal to "yes" in a new `warm_temperatures` variable, and "no" when lower than 30-degrees Celsius. Set everything else equal to `NA`. The code will also provide a new month column with either "June" or "July" as entries.
+10.  Copy and paste the code chunk below into your starter file under Exercise 9, and complete the `mutate()` and `case_when()` function combination to set `air_temperature` values greater than 30-degrees Celsius equal to "yes" in a new `warm_temperatures` variable, and "no" when lower than 30-degrees Celsius. Set everything else equal to `NA`. The code will also provide a new month column with either "June" or "July" as entries.
 
 ```{r create-warm-temperatures, eval = F}
 temps_june_july <- fluxes %>% 
@@ -200,7 +225,9 @@ temps_june_july <- fluxes %>%
   select(month, air_temperature, warm_temperatures)
 ```
 
-10. Let's visualize our observations for each month. Copy and paste the code chunk below into your starter and complete it so that:
+### End of Exercise 10
+
+11. Let's visualize our observations for each month. Copy and paste the code chunk below into your starter and complete it so that:
 
 -   missing values are removed in `month` and `warm_temperatures` columns
 -   we fill two bars according to the count of warm vs. cool summer hours
@@ -222,6 +249,8 @@ temps_june_july %>%
   theme_bw()
 ```
 
+### End of Exercise 11
+
 Hypothesis testing using randomization allows us to ask the statistical question: is the difference in occurrence of warm temperatures between July and August due to random chance (the NULL hypothesis), OR is it due to the change in month (ALTERNATIVE hypothesis)?
 
 First, let's calculate our sample statistic `p` for the difference in probability of warm temperatures between July and August:
@@ -235,7 +264,7 @@ temps_june_july %>%
             total_hours = n())
 ```
 
-11. Using the code chunk below in your starter file, insert the values from the last output to compute the sample statistic `p`.
+12. Using the code chunk below in your starter file, insert the values from the last output to compute the sample statistic `p`.
 
 ```{r calculate-sample-p, eval = F}
 p_hat <- (___/___) - (___/___) # Eqn is n_yes_july/n_all_july - n_yes_june/n_all_june
@@ -244,11 +273,13 @@ p_hat
 
 From this we can say...
 
-"From our data, warm temperatures are `r p_hat*100` more likely in July than in June"
+"From our data, warm temperatures are `insert in-line code` more likely in July than in June"
+
+### End of Exercise 12
 
 Finally, we want to see whether this probability (p_hat) is an extreme value, given the data.
 
-12. Copy and paste the code chunk below, and complete it to test the hypothesis that `warm_temperatures` is dependent on `month` in a non-random manner using 1000 bootstrap simulations. After completing the code, state below you chunk output whether you will accept or reject the null hypothesis, and why.
+13. Copy and paste the code chunk below, and complete it to test the hypothesis that `warm_temperatures` is dependent on `month` in a non-random manner using 1000 bootstrap simulations. After completing the code, state below you chunk output whether you will accept or reject the null hypothesis, and why.
 
 ```{r test-temperature-hypothesis, eval = F}
 set.seed(35)
@@ -261,6 +292,8 @@ temps_june_july %>%
   summarize(p_value = sum(stat > ___) / n())
 ```
 
+### End of Exercise 13
+
 You are officially done with all the labs and homework in EAES 420!
-Good job!
+Great work!
 👏
